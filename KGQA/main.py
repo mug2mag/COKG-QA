@@ -39,6 +39,7 @@ def str2bool(v):
 
 embedding_path = config['DEFAULT']['complex_vec']
 id2en_path = config['DEFAULT']['id2entity']
+id2type_path = config['DEFAULT']['id2type']
 QA_data_path = config['DEFAULT']['qa_data']
 
 file_without_confine = config['wrong_answer_analysis']['file_without_confine']
@@ -83,7 +84,7 @@ args = parser.parse_args()
 id2entities = None
 
 embedding_path = os.path.join(args.data_path, embedding_path)
-id2en_path = os.path.join(args.data_path, "id2entity.json")
+# id2en_path = os.path.join(args.data_path, "id2entity.json")
 
 if args.save_path == '':
     args.save_path = time.strftime('%Y-%m-%d-%H-%M')
@@ -422,7 +423,7 @@ def train(data_path, neg_batch_size, batch_size, shuffle, num_workers, nb_epochs
 
     ent_id2type, mat_type2ent = None, None
 
-    with open(os.path.join(args.data_path, 'id2type.json'), 'r', encoding='utf-8') as file:
+    with open(id2type_path, 'r', encoding='utf-8') as file:
         id2type = json.load(file)
     type2id = {}
     for key, value in id2type.items():
@@ -872,7 +873,7 @@ def data_generator(data, dataloader, entity2idx):
 
     head_embeddings, tail_embeddings, tail_ids = [], [], []
 
-    with open(os.path.join(args.data_path, 'id2type.json'), 'r', encoding='utf-8') as file:
+    with open(id2type_path, 'r', encoding='utf-8') as file:
         id2type = json.load(file)
     type2id = {}
     for key, value in id2type.items():
